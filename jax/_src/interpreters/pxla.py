@@ -2897,8 +2897,16 @@ class UnloadedMeshExecutable:
           "A jitted computation cannot contain AbstractMesh in in_shardings and"
           " out_shardings during compilation. You can use `jax.export` to "
           " lower with an AbstractMesh and later compile with concrete devices.")
-    if shape_poly_state is not None and shape_poly_state.uses_dim_vars:
-      hlo = mlir.refine_polymorphic_shapes(hlo)
+    #########
+    if name != "jit(call_exported)":
+      if shape_poly_state is not None and shape_poly_state.uses_dim_vars:
+        hlo = mlir.refine_polymorphic_shapes(hlo)
+    else:
+      ctx = mlir.make_ir_context()
+      with open("/mnt/chengji/jax/dynamic/dyn.mlir", 'r') as f:
+        mlir_text = f.read()
+      hlo = ir.Module.parse(mlir_text, ctx)
+
     if isinstance(device_assignment, xc.DeviceList):
       da = device_assignment
     else:

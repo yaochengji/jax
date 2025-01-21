@@ -69,8 +69,8 @@ exp = export.export(
         jax.ShapeDtypeStruct((m, l), jnp.float32),
         jax.ShapeDtypeStruct((l, n), jnp.float32))
 
-for i in range(1, 5):
-  print(f"========= step {i} ============")
+for i in range(1, 2):
+  print(f"========= step {i} ============", flush=True)
   x_shape = (256 * i, 1024)
   y_shape = (1024, 2048)
   key = jax.random.key(i)
@@ -81,11 +81,11 @@ for i in range(1, 5):
   res_exp = exp.call(x, y).block_until_ready()
   end_time = time.time()
   print("[1st run] shape: ", x_shape, " time: ", f"{(end_time - start_time) * 1000:.3f}ms", flush=True)
-  key = jax.random.key(i + 1000)
-  key1, key2 = jax.random.split(key, 2)
-  x = jax.random.normal(key1, x_shape, dtype=np.float32).block_until_ready()
-  y = jax.random.normal(key2, y_shape, dtype=np.float32).block_until_ready()
-  start_time = time.time()
-  res_exp = exp.call(x, y).block_until_ready()
-  end_time = time.time()
-  print("[2nd run] shape: ", x_shape, " time: ", f"{(end_time - start_time) * 1000:.3f}ms", flush=True)
+#   key = jax.random.key(i + 1000)
+#   key1, key2 = jax.random.split(key, 2)
+#   x = jax.random.normal(key1, x_shape, dtype=np.float32).block_until_ready()
+#   y = jax.random.normal(key2, y_shape, dtype=np.float32).block_until_ready()
+#   start_time = time.time()
+#   res_exp = exp.call(x, y).block_until_ready()
+#   end_time = time.time()
+#   print("[2nd run] shape: ", x_shape, " time: ", f"{(end_time - start_time) * 1000:.3f}ms", flush=True)
